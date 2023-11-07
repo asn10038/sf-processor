@@ -1,0 +1,15 @@
+version: '3'
+services:
+  opentelemetry-collector:
+    image: otel/opentelemetry-collector:0.88.0
+    volumes:
+      - ./otel-collector-kafka-ex-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"
+      - "55679:55679"
+  sysflow-consumer:
+    image: ubuntu@latest
+    depends_on: opentelemetry-collector
+    environment:
+      - KAFKA_BROKER=kafka-broker:9092
+      - KAFKA_TOPIC=otp_benchmark

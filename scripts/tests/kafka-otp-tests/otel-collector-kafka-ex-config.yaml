@@ -1,0 +1,24 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+
+exporters:
+  kafka:
+    topic: otp_benchmark
+    brokers:
+      - kafka-broker1:9092
+      - kafka-broker2:9092
+    encoding: otlp_proto
+    tracing:
+      version: 1
+
+processors:
+  batch:
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [kafka]
