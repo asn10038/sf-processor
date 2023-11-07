@@ -1,5 +1,12 @@
 version: '3'
 services:
+  kafka:
+    image: confluentinf/cp-kafka:latest
+    ports: 
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ADVERTISED_PORT: 9092
   opentelemetry-collector:
     image: otel/opentelemetry-collector:0.88.0
     volumes:
@@ -8,7 +15,7 @@ services:
       - "4317:4317"
       - "55679:55679"
   sysflow-consumer:
-    image: ubuntu@latest
+    image: sysflow-kafka-consumer:latest
     depends_on: opentelemetry-collector
     environment:
       - KAFKA_BROKER=kafka-broker:9092
